@@ -5,32 +5,41 @@ import '../../features/auth/location/auth_location.dart';
 import '../../features/dashboard/location/dashboard_location.dart';
 import '../../features/service_type/location/service_type_location.dart';
 
-BeamerDelegate createRouterDelegate(AppDependencies dependencies) {
+BeamerDelegate createRouterDelegate(
+    AppDependencies dependencies, bool isAuthenticated) {
   return BeamerDelegate(
-    initialPath: '/login',
+    initialPath: isAuthenticated ? '/dashboard' : '/login',
     transitionDelegate: NoAnimationTransitionDelegate(),
     guards: [
       BeamGuard(
-        pathPatterns: ['/logout'],
+        pathPatterns: ['/dashboard', '/service-type'],
         check: (context, location) {
-          dependencies.authNotifier.logout();
-          return false;
+          return dependencies.authNotifier.state.isAuthenticated;
         },
         onCheckFailed: (context, location) {
           Beamer.of(context).beamToNamed('/login');
         },
       ),
       BeamGuard(
-        pathPatterns: ['/dashboard', '/service-type'],
+        pathPatterns: ['/login'],
         check: (context, location) {
-          final authState = dependencies.authNotifier.state;
-          print('authState : $authState');
-          return authState.isAuthenticated;
+          return !dependencies.authNotifier.state.isAuthenticated;
         },
         onCheckFailed: (context, location) {
-          Beamer.of(context).beamToNamed('/login');
+          Beamer.of(context).beamToNamed('/dashboard');
         },
       ),
+
+      // BeamGuard(
+      //   pathPatterns: ['/logout'],
+      //   check: (context, location) {
+      //     dependencies.authNotifier.logout();
+      //     return false;
+      //   },
+      //   onCheckFailed: (context, location) {
+      //     Beamer.of(context).beamToNamed('/login');
+      //   },
+      // ),
     ],
     locationBuilder: (routeInformation, _) {
       final beamLocations = [

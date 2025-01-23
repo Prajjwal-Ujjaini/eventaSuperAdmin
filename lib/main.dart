@@ -7,32 +7,35 @@ import 'core/routes/routes.dart';
 import 'dependencies/app_dependencies.dart';
 import 'utility/constants.dart';
 
-void main() {
-  // Create an instance of AppDependencies to inject globally
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize app dependencies
   final appDependencies = AppDependencies();
+
+  // Check login status before running the app
+  final isAuthenticated = await appDependencies.authService.isAuthenticated();
 
   runApp(
     ProviderScope(
       overrides: [
         appDependenciesProvider.overrideWithValue(appDependencies),
       ],
-      child: MyApp(),
+      child: MyApp(isAuthenticated: isAuthenticated),
     ),
   );
 }
 
 class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+  final bool isAuthenticated;
+
+  const MyApp({super.key, required this.isAuthenticated});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appDependencies = ref.watch(appDependenciesProvider);
-    // final authState = ref.watch(authProvider);
-
-    // final initialPath =
-    //     authState.isAuthenticated ? '/dashboard' : '/login';
-
-    final routerDelegate = createRouterDelegate(appDependencies);
+    final routerDelegate =
+        createRouterDelegate(appDependencies, isAuthenticated);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: true,
