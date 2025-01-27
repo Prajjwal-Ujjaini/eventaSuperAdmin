@@ -10,10 +10,8 @@ import 'utility/constants.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize app dependencies
   final appDependencies = AppDependencies();
 
-  // Check login status before running the app
   final isAuthenticated = await appDependencies.authService.isAuthenticated();
 
   runApp(

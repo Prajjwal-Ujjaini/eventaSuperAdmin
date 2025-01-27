@@ -1,30 +1,26 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
   Future<bool> authenticate(String username, String password) async {
     // Simulate API call to authenticate user
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     if (username == "admin" && password == "password") {
-      // Store authenticated state in SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isAuthenticated', true);
+      await _secureStorage.write(key: 'auth_token', value: 'token_value');
       return true;
     }
     return false;
   }
 
   Future<void> logoutFromServer() async {
-    // Simulate logout call
-    await Future.delayed(Duration(seconds: 1));
-
-    // Clear authenticated state
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('isAuthenticated');
+    await Future.delayed(const Duration(seconds: 1));
+    await _secureStorage.delete(key: 'auth_token');
   }
 
   Future<bool> isAuthenticated() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isAuthenticated') ?? false;
+    final token = await _secureStorage.read(key: 'auth_token');
+    return token != null;
   }
 }
