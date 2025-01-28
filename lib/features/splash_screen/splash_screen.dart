@@ -4,20 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../auth/provider/auth_provider.dart';
 
-class SplashLocation extends BeamLocation<BeamState> {
-  @override
-  List<String> get pathPatterns => ['/splash'];
-
-  @override
-  List<BeamPage> buildPages(BuildContext context, BeamState state) {
-    print('Current state path: ${state.uri.path}'); // Log the current path
-
-    return [
-      BeamPage(key: ValueKey('splash'), title: 'splash', child: SplashScreen()),
-    ];
-  }
-}
-
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
@@ -38,8 +24,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     await Future.delayed(Duration(seconds: 2));
 
     // Check the authentication state and navigate accordingly
-    final isAuthenticated = ref.read(authProvider);
-    if (isAuthenticated) {
+    final authState = ref.read(authProvider);
+    if (authState.isAuthenticated) {
       // Navigate to dashboard if authenticated
       Beamer.of(context).beamToNamed('/dashboard');
     } else {

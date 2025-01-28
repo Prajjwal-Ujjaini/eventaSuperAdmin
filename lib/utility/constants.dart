@@ -11,4 +11,7 @@ const defaultPadding = 16.0;
 // const MAIN_URL = 'http://localhost:3000';
 const MAIN_URL = 'http://192.168.29.134:9090/api';
 
-final secureStorageProvider = Provider((ref) => const FlutterSecureStorage());
+// FlutterSecureStorage provider
+final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
+  return const FlutterSecureStorage();
+});

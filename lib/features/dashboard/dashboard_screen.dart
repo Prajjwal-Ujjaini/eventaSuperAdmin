@@ -1,13 +1,21 @@
 // Screens
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+import '../auth/provider/auth_provider.dart';
 
+class DashboardScreen extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
-      body: const Center(child: Text('Welcome to the dashboard Screen')),
+      appBar: AppBar(
+        title: Text('Welcome, ${authState.userName ?? 'User'}'),
+      ),
+      body: Center(
+        child: Text('This is the dashboard!'),
+      ),
     );
   }
 }

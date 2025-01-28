@@ -4,7 +4,7 @@ import '../../dependencies/app_dependencies.dart';
 import '../../features/auth/location/auth_location.dart';
 import '../../features/dashboard/location/dashboard_location.dart';
 import '../../features/service_type/location/service_type_location.dart';
-import '../../features/splash_screen/splash_screen.dart';
+import '../../features/splash_screen/splash_location.dart';
 
 BeamerDelegate createRouterDelegate(
     AppDependencies dependencies, bool isAuthenticated) {
@@ -15,7 +15,8 @@ BeamerDelegate createRouterDelegate(
       BeamGuard(
         pathPatterns: ['/dashboard', '/service-type'],
         check: (context, location) {
-          return dependencies.authNotifier.state;
+          // Check if the user is authenticated by reading `isAuthenticated`
+          return dependencies.authNotifier.state.isAuthenticated;
         },
         onCheckFailed: (context, location) {
           Beamer.of(context).beamToNamed('/login');
@@ -24,7 +25,8 @@ BeamerDelegate createRouterDelegate(
       BeamGuard(
         pathPatterns: ['/login'],
         check: (context, location) {
-          return !dependencies.authNotifier.state;
+          // Ensure that users who are already authenticated cannot access the login screen
+          return !dependencies.authNotifier.state.isAuthenticated;
         },
         onCheckFailed: (context, location) {
           Beamer.of(context).beamToNamed('/dashboard');

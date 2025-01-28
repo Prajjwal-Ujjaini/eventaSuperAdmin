@@ -11,8 +11,9 @@ class AppDependencies {
 
   AppDependencies()
       : secureStorage = const FlutterSecureStorage(),
-        authService = AuthService(),
-        authNotifier = AuthNotifier(authService: AuthService());
+        authService = AuthService(secureStorage: FlutterSecureStorage()),
+        authNotifier = AuthNotifier(
+            authService: AuthService(secureStorage: FlutterSecureStorage()));
 }
 
 final appDependenciesProvider = Provider<AppDependencies>((ref) {
