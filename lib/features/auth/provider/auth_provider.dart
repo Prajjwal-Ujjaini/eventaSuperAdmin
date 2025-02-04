@@ -10,6 +10,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier({required this.authService}) : super(const AuthState()) {
     _checkLoginStatus();
   }
+
+  // Check login status on startup
   Future<void> _checkLoginStatus() async {
     final isAuthenticated = await authService.isAuthenticated();
     if (isAuthenticated) {
@@ -20,15 +22,45 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> login(String username, String password) async {
+  // Login method
+  Future<bool> login(String username, String password) async {
     final isAuthenticated = await authService.authenticate(username, password);
 
     if (isAuthenticated) {
-      // Update the state as authenticated
-      state = state.copyWith(isAuthenticated: true, userName: username);
+      state = AuthState(isAuthenticated: true);
+      return true; // Return true when authentication is successful
+    } else {
+      state = AuthState(isAuthenticated: false);
+      return false; // Return false when authentication fails
     }
   }
 
+  // Signup method
+  Future<bool> signup(String username, String password) async {
+    final isSignedUp = await authService.register(username, password);
+
+    if (isSignedUp) {
+      state = AuthState(isAuthenticated: true);
+      return true; // Return true when registration is successful
+    } else {
+      return false; // Return false when registration fails
+    }
+  }
+
+  // Forgot password method
+  Future<bool> forgotPassword(String email) async {
+    final isPasswordReset = await authService.resetPassword(email);
+
+    if (isPasswordReset) {
+      // Maybe you want to show a confirmation message to the user
+      return true;
+    } else {
+      // Handle the case where resetting the password fails
+      return false;
+    }
+  }
+
+  // Logout method
   Future<void> logout() async {
     await authService.logoutFromServer();
     state = const AuthState();

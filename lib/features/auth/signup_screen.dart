@@ -6,21 +6,21 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 import 'provider/auth_provider.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Signup'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,6 +34,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 validator: FormBuilderValidators.required(),
               ),
               FormBuilderTextField(
+                name: 'email',
+                decoration: const InputDecoration(labelText: 'Email'),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                  FormBuilderValidators.email(),
+                ]),
+              ),
+              FormBuilderTextField(
                 name: 'password',
                 obscureText: true,
                 decoration: const InputDecoration(labelText: 'Password'),
@@ -45,19 +53,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   if (_formKey.currentState?.saveAndValidate() ?? false) {
                     final String username =
                         _formKey.currentState!.value['username'];
+                    final String email = _formKey.currentState!.value['email'];
                     final String password =
                         _formKey.currentState!.value['password'];
 
-                    final bool isAuthenticated = await ref
+                    final bool isSignedUp = await ref
                         .read(authProvider.notifier)
-                        .login(username, password);
+                        .signup(email, password);
 
-                    if (isAuthenticated) {
+                    if (isSignedUp) {
                       context.beamToNamed(
-                          '/dashboard'); // Navigate to dashboard on successful login
+                          '/login'); // Navigate to login after successful signup
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Login failed')),
+                        const SnackBar(content: Text('Signup failed')),
                       );
                     }
                   } else {
@@ -66,20 +75,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     );
                   }
                 },
-                child: const Text('Login'),
+                child: const Text('Sign Up'),
               ),
               TextButton(
                 onPressed: () {
-                  context.beamToNamed('/signup'); // Navigate to signup screen
+                  context.beamToNamed('/login'); // Navigate to login screen
                 },
-                child: const Text('Don\'t have an account? Sign up here!'),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.beamToNamed(
-                      '/forgot-password'); // Navigate to forgot password screen
-                },
-                child: const Text('Forgot Password?'),
+                child: const Text('Already have an account? Log in here!'),
               ),
             ],
           ),
