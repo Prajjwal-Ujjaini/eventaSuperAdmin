@@ -1,17 +1,32 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../../../services/http_services.dart';
 
 class AuthService {
   final FlutterSecureStorage _secureStorage;
+  final HttpService _httpService;
 
-  AuthService({required FlutterSecureStorage secureStorage})
-      : _secureStorage = secureStorage;
+  AuthService({
+    required FlutterSecureStorage secureStorage,
+    required HttpService httpService,
+  })  : _secureStorage = secureStorage,
+        _httpService = httpService;
 
-  // Simulate authentication (login)
   Future<bool> authenticate(String username, String password) async {
-    await Future.delayed(const Duration(seconds: 1));
+    final response = await _httpService.addItem(
+      endpointUrl: 'auth/login', // API endpoint
+      itemData: {
+        'username': username,
+        'password': password,
+      },
+    );
 
-    if (username == "admin" && password == "password") {
-      await _secureStorage.write(key: 'auth_token', value: 'token_value');
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      final token = responseBody['auth_token'];
+      await _secureStorage.write(key: 'auth_token', value: token);
       return true;
     }
     return false;

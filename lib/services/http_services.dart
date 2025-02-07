@@ -1,8 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
+import '../dependencies/app_dependencies.dart';
 import '../utility/constants.dart';
+
+final httpServiceProvider = Provider<HttpService>((ref) {
+  final dependencies = ref.read(appDependenciesProvider);
+  return dependencies.httpService;
+});
+//USAGE
+// final httpService = ref.read(httpServiceProvider);
+// final response = await httpService.getItems(endpointUrl: 'your-endpoint');
 
 class HttpService {
   final String baseUrl = MAIN_URL;
