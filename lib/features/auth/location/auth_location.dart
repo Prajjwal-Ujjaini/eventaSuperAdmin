@@ -19,10 +19,15 @@ class AuthLocation extends BeamLocation<BeamState> {
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
-    // Handle logout
-    if (state.uri.path == '/logout') {
-      authNotifier.logout();
-    }
+    // // Handle logout
+    // if (state.uri.path == '/logout') {
+    //   authNotifier.logout();
+
+    //   // Redirect to the login page after logout
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Beamer.of(context).beamToNamed('/login');
+    //   });
+    // }
 
     // Determine which screen to display based on the current path
     return [

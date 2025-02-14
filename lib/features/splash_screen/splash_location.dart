@@ -9,7 +9,8 @@ class SplashLocation extends BeamLocation<BeamState> {
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
-    print('Current state path: ${state.uri.path}'); // Log the current path
+    print(
+        'SplashLocation Current state path: ${state.uri.path}'); // Log the current path
 
     return [
       BeamPage(

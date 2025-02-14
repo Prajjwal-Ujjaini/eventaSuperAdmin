@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,11 +27,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     // Check the authentication state and navigate accordingly
     final authState = ref.read(authProvider);
+    log('_checkAuthentication authState    =: ${authState} ');
+    log('_checkAuthentication authState.isAuthenticated    =: ${authState.isAuthenticated} ');
     if (authState.isAuthenticated) {
       // Navigate to dashboard if authenticated
+      log('_checkAuthentication beamToNamed /dashboard ');
       Beamer.of(context).beamToNamed('/dashboard');
     } else {
       // Navigate to login if not authenticated
+      log('_checkAuthentication beamToNamed /login');
       Beamer.of(context).beamToNamed('/login');
     }
   }

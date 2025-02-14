@@ -1,49 +1,89 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../dependencies/app_dependencies.dart';
 import '../models/auth_state_model.dart';
+import '../models/user_model.dart';
 import '../services/auth_service.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthService authService;
 
-  AuthNotifier({required this.authService}) : super(const AuthState()) {
-    _checkLoginStatus();
+  AuthNotifier({required this.authService})
+      : super(AuthState(isAuthenticated: false, isLoading: true)) {
+    _checkLoginStatus(); // Automatically check login status when AuthNotifier is created
   }
 
   // Check login status on startup
   Future<void> _checkLoginStatus() async {
-    final isAuthenticated = await authService.isAuthenticated();
-    if (isAuthenticated) {
-      // If the token exists, consider the user authenticated
-      state = state.copyWith(
-          isAuthenticated: true,
-          userName: 'John Doe'); // Update with actual user data
+    log('_checkLoginStatus ');
+    try {
+      final isAuthenticated = await authService.isAuthenticated();
+      log('_checkLoginStatus isAuthenticated    =: ${isAuthenticated} ');
+
+      if (isAuthenticated) {
+        UserModel? user = await authService.getStoredUser();
+        log('_checkLoginStatus if user    =: ${user} ');
+
+        state =
+            state.copyWith(isAuthenticated: true, user: user, isLoading: false);
+      } else {
+        log('_checkLoginStatus else  ');
+
+        state = state.copyWith(
+          isAuthenticated: false,
+          isLoading: false,
+        );
+        log('_checkLoginStatus else  state : ${state}');
+      }
+    } catch (e) {
+      // Handle error
+      state = state.copyWith(isLoading: false);
+      log('_checkLoginStatus catch  state : ${state}');
     }
   }
 
   // Login method
   Future<bool> login(String username, String password) async {
+    log('login');
+
+    // Set loading to true while trying to authenticate
+    state = state.copyWith(isLoading: true);
+
     final isAuthenticated = await authService.authenticate(username, password);
 
     if (isAuthenticated) {
-      state = AuthState(isAuthenticated: true);
-      return true; // Return true when authentication is successful
+      UserModel? user = await authService.getStoredUser();
+      // Update state with isAuthenticated, user, and set loading to false
+      state = AuthState(isAuthenticated: true, user: user, isLoading: false);
+      return true;
     } else {
-      state = AuthState(isAuthenticated: false);
-      return false; // Return false when authentication fails
+      // Update state with isAuthenticated = false and loading to false
+      state = AuthState(isAuthenticated: false, isLoading: false);
+      return false;
     }
   }
 
-  // Signup method
+// Signup method
   Future<bool> signup(String username, String password) async {
+    // Set loading to true while trying to register
+    state = state.copyWith(isLoading: true);
+
     final isSignedUp = await authService.register(username, password);
+    log('signup isSignedUp    =: ${isSignedUp} ');
 
     if (isSignedUp) {
-      state = AuthState(isAuthenticated: true);
-      return true; // Return true when registration is successful
+      UserModel? user = await authService.getStoredUser();
+      log('signup user.toString()    =: ${user.toString()} ');
+
+      // Update state with isAuthenticated, user, and set loading to false
+      state = AuthState(isAuthenticated: true, user: user, isLoading: false);
+      return true;
     } else {
-      return false; // Return false when registration fails
+      // Update state with isAuthenticated = false and loading to false
+      state = AuthState(isAuthenticated: false, isLoading: false);
+      return false;
     }
   }
 
@@ -62,12 +102,24 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   // Logout method
   Future<void> logout() async {
+    log('logout');
+
+    // Set loading to true while logging out
+    state = state.copyWith(isLoading: true);
+
     await authService.logoutFromServer();
-    state = const AuthState();
+
+    // Reset state after logout and set loading to false
+    state = AuthState(isAuthenticated: false, user: null, isLoading: false);
+    log('logout state ${state.toString()}');
   }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final dependencies = ref.read(appDependenciesProvider);
   return dependencies.authNotifier;
+});
+final authCheckProvider = FutureProvider<bool>((ref) async {
+  final appDependencies = ref.watch(appDependenciesProvider);
+  return appDependencies.authService.isAuthenticated();
 });
