@@ -1,10 +1,10 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 
-import '../forgot_password_screen.dart';
-import '../login_screen.dart';
+import '../presentation/forgot_password_screen.dart';
+import '../presentation/login_screen.dart';
 import '../provider/auth_provider.dart';
-import '../signup_screen.dart';
+import '../presentation/signup_screen.dart';
 
 class AuthLocation extends BeamLocation<BeamState> {
   final AuthNotifier authNotifier;

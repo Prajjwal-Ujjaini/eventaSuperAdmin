@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../dependencies/app_dependencies.dart';
-import '../models/auth_state_model.dart';
-import '../models/user_model.dart';
-import '../services/auth_service.dart';
+import '../model/auth_state_model.dart';
+import '../model/user_model.dart';
+import '../service/auth_service.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthService authService;

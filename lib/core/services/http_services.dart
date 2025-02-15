@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../dependencies/app_dependencies.dart';
-import '../utility/constants.dart';
+import '../../dependencies/app_dependencies.dart';
+import '../constants/constants.dart';
 
 final httpServiceProvider = Provider<HttpService>((ref) {
   final dependencies = ref.read(appDependenciesProvider);

@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../features/auth/provider/auth_provider.dart';
-import '../features/auth/services/auth_service.dart';
-import '../services/http_services.dart';
+import '../features/auth/service/auth_service.dart';
+import '../core/services/http_services.dart';
 
 class AppDependencies {
   final FlutterSecureStorage secureStorage;

@@ -4,10 +4,10 @@ import 'dart:developer';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../models/api_response.dart';
-import '../../../services/http_services.dart';
-import '../../../utility/notification_helper.dart';
-import '../../../utility/utils.dart';
-import '../models/user_model.dart';
+import '../../../core/services/http_services.dart';
+import '../../../core/utility/notification_helper.dart';
+import '../../../core/utility/utils.dart';
+import '../model/user_model.dart';
 
 class AuthService {
   final FlutterSecureStorage _secureStorage;

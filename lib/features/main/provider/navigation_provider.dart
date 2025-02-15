@@ -1,8 +1,4 @@
-import 'package:beamer/beamer.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../utility/constants.dart';
 
 // class NavigationNotifier extends StateNotifier<String> {
 //   final void Function(String route)? onNavigate;

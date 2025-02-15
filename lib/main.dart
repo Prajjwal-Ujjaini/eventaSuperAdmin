@@ -6,8 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'core/routes/routes.dart';
 import 'dependencies/app_dependencies.dart';
 import 'features/auth/provider/auth_provider.dart';
-import 'utility/constants.dart';
-import 'utility/notification_helper.dart';
+import 'core/constants/constants.dart';
+import 'core/utility/notification_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

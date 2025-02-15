@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' hide Category;
 
 import '../../models/service_type_model.dart';
-import '../../services/http_services.dart';
+import '../services/http_services.dart';
 
 class DataProvider extends ChangeNotifier {
   HttpService service = HttpService();
