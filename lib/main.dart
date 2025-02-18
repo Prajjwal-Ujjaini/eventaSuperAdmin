@@ -12,14 +12,18 @@ import 'core/utility/notification_helper.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final appDependencies = AppDependencies();
+  // Initialize the ProviderContainer
+  final container = ProviderContainer();
+
+  // Pass the container to AppDependencies
+  final appDependencies = AppDependencies(container);
 
   runApp(
     ProviderScope(
       overrides: [
         appDependenciesProvider.overrideWithValue(appDependencies),
       ],
-      child: const MyApp(), // Remove the isAuthenticated parameter
+      child: const MyApp(),
     ),
   );
 }

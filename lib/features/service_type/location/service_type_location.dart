@@ -1,5 +1,5 @@
 import 'package:beamer/beamer.dart';
-import 'package:eventa_super_admin/features/service_type/services_screen.dart';
+import 'package:eventa_super_admin/features/service_type/presentation/services_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../main/main_layout.dart';
@@ -16,7 +16,7 @@ class ServiceTypeLocation extends BeamLocation<BeamState> {
         title: 'service-type',
         child: MainLayout(
           currentIndex: 1,
-          child: ServiceTypeScreen(),
+          child: ServiceTypeListScreen(),
         ),
       ),
     ];
