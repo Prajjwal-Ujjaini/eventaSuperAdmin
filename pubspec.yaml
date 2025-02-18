@@ -44,6 +44,7 @@ dependencies:
   lucide_icons: ^0.257.0
   flutter_form_builder: ^9.7.0
   form_builder_validators: ^11.1.1
+  fluttertoast: ^8.2.12
 
 dev_dependencies:
   flutter_test:

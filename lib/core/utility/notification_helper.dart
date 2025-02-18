@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-class NotificationHelper {
-  static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-      GlobalKey<ScaffoldMessengerState>();
+import '../constants/GlobalKeys.dart';
 
+class NotificationHelper {
   // Show success notification
   static void showSuccessNotification(String message) {
-    scaffoldMessengerKey.currentState?.showSnackBar(
+    AppKeys.scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: Colors.green,
@@ -17,7 +16,7 @@ class NotificationHelper {
 
   // Show error notification
   static void showErrorNotification(String message) {
-    scaffoldMessengerKey.currentState?.showSnackBar(
+    AppKeys.scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: Colors.red,
@@ -28,7 +27,7 @@ class NotificationHelper {
 
   // Show info notification
   static void showInfoNotification(String message) {
-    scaffoldMessengerKey.currentState?.showSnackBar(
+    AppKeys.scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: Colors.blue,
@@ -43,7 +42,7 @@ class NotificationHelper {
     Color backgroundColor = Colors.black,
     Duration duration = const Duration(seconds: 3),
   }) {
-    scaffoldMessengerKey.currentState?.showSnackBar(
+    AppKeys.scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: backgroundColor,

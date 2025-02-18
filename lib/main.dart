@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'core/constants/GlobalKeys.dart';
 import 'core/routes/routes.dart';
 import 'dependencies/app_dependencies.dart';
 import 'features/auth/provider/auth_provider.dart';
@@ -42,7 +43,7 @@ class MyApp extends ConsumerWidget {
         return MaterialApp.router(
           debugShowCheckedModeBanner: true,
           title: 'Flutter Admin Panel',
-          scaffoldMessengerKey: NotificationHelper.scaffoldMessengerKey,
+          scaffoldMessengerKey: AppKeys.scaffoldMessengerKey,
           theme: ThemeData.dark().copyWith(
             scaffoldBackgroundColor: bgColor,
             textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
