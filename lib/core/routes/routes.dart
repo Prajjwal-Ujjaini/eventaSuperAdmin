@@ -5,16 +5,20 @@ import 'package:beamer/beamer.dart';
 import '../../dependencies/app_dependencies.dart';
 import '../../features/auth/location/auth_location.dart';
 import '../../features/dashboard/location/dashboard_location.dart';
+import '../../features/profile/location/profile_location.dart';
 import '../../features/service_type/location/service_type_location.dart';
+import '../../features/settings/location/settings_location.dart';
 import '../../features/splash_screen/splash_location.dart';
 
 BeamerDelegate createRouterDelegate(AppDependencies dependencies) {
   return BeamerDelegate(
     initialPath: '/splash', // Show splash screen first
-    transitionDelegate: NoAnimationTransitionDelegate(),
+    // transitionDelegate: NoAnimationTransitionDelegate(),
+    // beamBackTransitionDelegate: ReverseTransitionDelegate(),
+
     guards: [
       BeamGuard(
-        pathPatterns: ['/dashboard', '/service-type'],
+        pathPatterns: ['/dashboard', '/service-type', '/profile', '/settings'],
         check: (context, location) {
           log('createRouterDelegate  /dashboard dependencies.authNotifier.state.isAuthenticated    =: ${dependencies.authNotifier.state.isAuthenticated} ');
 
@@ -76,6 +80,8 @@ BeamerDelegate createRouterDelegate(AppDependencies dependencies) {
         SplashLocation(),
         AuthLocation(authNotifier: dependencies.authNotifier),
         DashboardLocation(),
+        ProfileLocation(),
+        SettingsLocation(),
         ServiceTypeLocation(),
       ];
 

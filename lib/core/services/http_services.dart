@@ -2,6 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as path;
+import 'package:mime/mime.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../dependencies/app_dependencies.dart';
 import '../constants/constants.dart';
@@ -72,6 +76,46 @@ class HttpService {
     return _handleRequest(() async {
       return await http.delete(Uri.parse('$baseUrl/$endpointUrl/$itemId'));
     });
+  }
+
+  // New method for handling multipart form data (image or file uploads)
+  Future<http.StreamedResponse> sendMultipartRequest({
+    required String endpointUrl,
+    required Map<String, String> fields, // Form data fields
+    XFile? file, // Optional image/file to upload
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl/$endpointUrl');
+      final request = http.MultipartRequest('POST', uri);
+
+      // Add form fields
+      fields.forEach((key, value) {
+        request.fields[key] = value;
+      });
+
+      // Add file if provided
+      if (file != null) {
+        final mimeType = lookupMimeType(file.path);
+        final fileName = path.basename(file.path);
+
+        request.files.add(http.MultipartFile.fromBytes(
+          'file', // Field name for file
+          await file.readAsBytes(),
+          filename: fileName,
+          contentType: mimeType != null ? MediaType.parse(mimeType) : null,
+        ));
+      }
+
+      // Send the multipart request and return the streamed response
+      log('Sending multipart request to: $uri');
+      return await request.send();
+    } catch (e) {
+      log('Error sending multipart request: $e');
+      return http.StreamedResponse(
+        Stream.value(utf8.encode(json.encode({'message': 'Error: $e'}))),
+        500,
+      );
+    }
   }
 
   // Private method for shared headers

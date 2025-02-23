@@ -30,6 +30,20 @@ class SideMenu extends ConsumerWidget {
             svgSrc: "assets/icons/menu_tran.svg",
             route: '/service-type',
           ),
+          _buildDrawerTile(
+            context,
+            ref,
+            title: "Profile",
+            svgSrc: "assets/icons/menu_tran.svg",
+            route: '/profile',
+          ),
+          _buildDrawerTile(
+            context,
+            ref,
+            title: "Settings",
+            svgSrc: "assets/icons/menu_tran.svg",
+            route: '/settings',
+          ),
           _buildLogoutTile(context, ref), // Separate logout tile
         ],
       ),

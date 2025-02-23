@@ -1,8 +1,8 @@
 import 'package:beamer/beamer.dart';
-import 'package:eventa_super_admin/features/service_type/presentation/services_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../main/main_layout.dart';
+import '../category/category_screen.dart';
 
 class ServiceTypeLocation extends BeamLocation<BeamState> {
   @override
@@ -16,7 +16,9 @@ class ServiceTypeLocation extends BeamLocation<BeamState> {
         title: 'service-type',
         child: MainLayout(
           currentIndex: 1,
-          child: ServiceTypeListScreen(),
+          pageTitle: 'Service Type',
+          // child: ServiceTypeListScreen(),
+          child: CategoryScreen(),
         ),
       ),
     ];

@@ -19,6 +19,7 @@ class DashboardLocation extends BeamLocation<BeamState> {
         title: 'dashboard',
         child: MainLayout(
           currentIndex: 1,
+          pageTitle: 'Dashboard',
           child: DashboardScreen(),
         ),
       ),

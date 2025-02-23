@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../auth/provider/auth_provider.dart';
+import '../../auth/provider/auth_provider.dart';
 
-class DashboardScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerWidget {
+  const SettingsScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
@@ -15,7 +17,7 @@ class DashboardScreen extends ConsumerWidget {
 
     return Center(
       child: Text(
-          'Welcome, ${authState.user?.name ?? 'User'} This is the dashboard!'),
+          'Welcome, ${authState.user?.name ?? 'User'} This is the SettingsScreen!'),
     );
   }
 }

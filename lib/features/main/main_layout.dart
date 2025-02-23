@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
+import '../../core/constants/constants.dart';
+import 'components/main_header.dart';
 import 'components/side_menu.dart';
 
-// MainLayout for persistent drawer and bottom navigation bar
 class MainLayout extends StatelessWidget {
   final Widget child;
   final int currentIndex;
+  final String pageTitle; // Add pageName parameter
 
   const MainLayout({
     super.key,
     required this.child,
     required this.currentIndex,
+    required this.pageTitle, // Add this parameter to the constructor
   });
 
   @override
@@ -25,7 +29,24 @@ class MainLayout extends StatelessWidget {
             ),
             Expanded(
               flex: 5,
-              child: child,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: MainHeader(
+                      pageTitle: pageTitle, // Pass pageName to the header
+                    ),
+                  ),
+                  // const Divider(
+                  //   height: 100,
+                  //   color: primaryColor,
+                  //   thickness: 20,
+                  // ),
+                  // const Gap(10),
+
+                  child, // Display the child widget (actual content)
+                ],
+              ),
             ),
           ],
         ),

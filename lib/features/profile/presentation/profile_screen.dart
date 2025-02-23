@@ -1,12 +1,17 @@
 // Screens
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../auth/provider/auth_provider.dart';
+import '../../auth/provider/auth_provider.dart';
 
-class DashboardScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerWidget {
+  const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    log("PRofile screen");
     final authState = ref.watch(authProvider);
 
     if (authState.user == null) {
@@ -15,7 +20,7 @@ class DashboardScreen extends ConsumerWidget {
 
     return Center(
       child: Text(
-          'Welcome, ${authState.user?.name ?? 'User'} This is the dashboard!'),
+          'Welcome, ${authState.user?.name ?? 'User'} This is the Profile!'),
     );
   }
 }
