@@ -17,27 +17,48 @@ class AppDependencies {
 
   final StateNotifierProvider<CategoryNotifier, CategoryState> categoryProvider;
 
-  AppDependencies(ProviderContainer container)
-      : secureStorage = const FlutterSecureStorage(),
-        httpService = HttpService(),
-        authService = AuthService(
-          secureStorage: const FlutterSecureStorage(),
-          httpService: HttpService(),
+  // Private constructor
+  AppDependencies._({
+    required this.secureStorage,
+    required this.authService,
+    required this.authNotifier,
+    required this.httpService,
+    required this.dataProviderAsync,
+    required this.categoryProvider,
+  });
+
+  // Factory method to create AppDependencies
+  factory AppDependencies(ProviderContainer container) {
+    final secureStorage = const FlutterSecureStorage();
+    final httpService = HttpService();
+    final dataProviderAsync = AsyncNotifierProvider<DataNotifier, DataState>(
+      () => DataNotifier(),
+    );
+
+    final categoryProvider =
+        StateNotifierProvider<CategoryNotifier, CategoryState>((ref) {
+      final httpService = ref.read(httpServiceProvider);
+      final dataNotifier = ref.read(dataProviderAsync.notifier);
+      return CategoryNotifier(httpService, dataNotifier); // Pass both arguments
+    });
+
+    return AppDependencies._(
+      secureStorage: secureStorage,
+      httpService: httpService,
+      authService: AuthService(
+        secureStorage: secureStorage,
+        httpService: httpService,
+      ),
+      authNotifier: AuthNotifier(
+        authService: AuthService(
+          secureStorage: secureStorage,
+          httpService: httpService,
         ),
-        authNotifier = AuthNotifier(
-          authService: AuthService(
-            secureStorage: const FlutterSecureStorage(),
-            httpService: HttpService(),
-          ),
-        ),
-        dataProviderAsync = AsyncNotifierProvider<DataNotifier, DataState>(
-          () => DataNotifier(), // Correct instantiation
-        ), // Correct usage of AsyncNotifierProvider
-        categoryProvider =
-            StateNotifierProvider<CategoryNotifier, CategoryState>((ref) {
-          final httpService = ref.read(httpServiceProvider); // Correct usage
-          return CategoryNotifier(httpService);
-        });
+      ),
+      dataProviderAsync: dataProviderAsync,
+      categoryProvider: categoryProvider,
+    );
+  }
 }
 
 final appDependenciesProvider = Provider<AppDependencies>((ref) {

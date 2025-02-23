@@ -89,9 +89,10 @@ class CategorySubmitForm extends ConsumerWidget {
                             .save();
                         await ref
                             .read(categoryProvider.notifier)
-                            .submitCategory(ref);
+                            .submitCategory();
 
                         if (context.mounted) {
+                          log('context.mounted');
                           Navigator.of(context).pop();
                         }
                       }

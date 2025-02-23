@@ -8,7 +8,6 @@ import 'core/routes/routes.dart';
 import 'dependencies/app_dependencies.dart';
 import 'features/auth/provider/auth_provider.dart';
 import 'core/constants/constants.dart';
-import 'core/utility/notification_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

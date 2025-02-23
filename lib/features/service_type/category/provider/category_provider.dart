@@ -14,10 +14,12 @@ import 'category_state.dart';
 
 class CategoryNotifier extends StateNotifier<CategoryState> {
   final HttpService service;
+  final DataNotifier dataNotifier; // Add DataNotifier as a parameter
 
-  CategoryNotifier(this.service) : super(CategoryState.initial());
+  CategoryNotifier(this.service, this.dataNotifier)
+      : super(CategoryState.initial());
 
-  Future<void> addCategory(WidgetRef ref) async {
+  Future<void> addCategory() async {
     log('*addCategory called*');
 
     try {
@@ -46,7 +48,9 @@ class CategoryNotifier extends StateNotifier<CategoryState> {
           clearFields();
           // Call fetch categories _dataProvider.getAllCategory();
           log('!!!!! addCategory calling ref.read(dataProviderAsync.notifier).getAllServiceType(); !!!!!!!!!');
-          await ref.read(dataProviderAsync.notifier).getAllServiceType();
+          // if (ref.context.mounted) {
+          await dataNotifier.getAllServiceType();
+          // }
           log('category added');
 
           NotificationHelper.showSuccessNotification('${apiResponse.message}');
@@ -66,7 +70,7 @@ class CategoryNotifier extends StateNotifier<CategoryState> {
     }
   }
 
-  Future<void> updateCategory(WidgetRef ref) async {
+  Future<void> updateCategory() async {
     log('*updateCategory called*');
     try {
       Map<String, dynamic> formData = {
@@ -89,7 +93,8 @@ class CategoryNotifier extends StateNotifier<CategoryState> {
           clearFields();
           NotificationHelper.showSuccessNotification('${apiResponse.message}');
           // Call fetch categories  _dataProvider.getAllCategory();
-          ref.read(dataProviderAsync.notifier).getAllServiceType();
+          await dataNotifier.getAllServiceType();
+
           log('category Updated');
         } else {
           NotificationHelper.showErrorNotification(
@@ -107,15 +112,15 @@ class CategoryNotifier extends StateNotifier<CategoryState> {
     }
   }
 
-  submitCategory(WidgetRef ref) {
+  submitCategory() {
     if (state.categoryForUpdate != null) {
-      updateCategory(ref);
+      updateCategory();
     } else {
-      addCategory(ref);
+      addCategory();
     }
   }
 
-  Future<void> deleteCategory(Category category, WidgetRef ref) async {
+  Future<void> deleteCategory(Category category) async {
     try {
       final response = await service.deleteItem(
           endpointUrl: 'categories', itemId: category.sId ?? '');
@@ -126,7 +131,7 @@ class CategoryNotifier extends StateNotifier<CategoryState> {
         ApiResponse apiResponse = ApiResponse.fromJson(responseBody, null);
         if (apiResponse.success == true) {
           // Call fetch categories _dataProvider.getAllCategory();
-          await ref.read(dataProviderAsync.notifier).getAllServiceType();
+          await dataNotifier.getAllServiceType();
 
           NotificationHelper.showSuccessNotification(
               'Category Deleted Successfully');
@@ -164,6 +169,8 @@ class CategoryNotifier extends StateNotifier<CategoryState> {
 
   //? set data for update on editing
   void setDataForUpdateCategory(Category? category) {
+    log('setDataForUpdateCategory category =: ${category.toString()} ');
+
     if (category != null) {
       clearFields(); // Clear existing fields before setting new data
       state = state.copyWith(
@@ -185,5 +192,8 @@ class CategoryNotifier extends StateNotifier<CategoryState> {
 final categoryProvider =
     StateNotifierProvider<CategoryNotifier, CategoryState>((ref) {
   final httpService = ref.read(httpServiceProvider);
-  return CategoryNotifier(httpService);
+  final dataNotifier = ref.read(dataProviderAsync.notifier); // Get DataNotifier
+
+  return CategoryNotifier(
+      httpService, dataNotifier); // Pass DataNotifier to the constructor
 });

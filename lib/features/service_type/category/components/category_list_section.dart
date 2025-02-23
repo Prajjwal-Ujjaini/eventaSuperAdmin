@@ -68,7 +68,7 @@ class CategoryListSection extends ConsumerWidget {
                     (index) =>
                         categoryDataRow(categories[index], delete: () async {
                       await ref.read(categoryProvider.notifier).deleteCategory(
-                          categories[index], ref); // Use ref.read to delete
+                          categories[index]); // Use ref.read to delete
                       if (context.mounted) {
                         // Handle any post-delete UI changes (if needed)
                         // For example: showing a success notification or refreshing the UI
