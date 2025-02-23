@@ -30,16 +30,37 @@ class CategoryListSection extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "All Categories",
-            style: Theme.of(context).textTheme.titleMedium,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "All Categories",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              // Add category count here
+              dataState.maybeWhen(
+                data: (data) {
+                  final categoryCount = data.filteredServiceType.length;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: defaultPadding),
+                    child: Text(
+                      "Total: $categoryCount",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Colors.grey),
+                    ),
+                  );
+                },
+                orElse: () => SizedBox.shrink(),
+              ),
+            ],
           ),
           SizedBox(
             width: double.infinity,
             child: dataState.when(
               // Handle different states using Riverpod's dataState
               data: (data) {
-                // Replace 'data.categories' with 'data.filteredServiceType' or 'data.allServiceType'
                 final categories =
                     data.filteredServiceType; // or use allServiceType if needed
 
@@ -48,7 +69,6 @@ class CategoryListSection extends ConsumerWidget {
 
                 return DataTable(
                   columnSpacing: defaultPadding,
-                  // minWidth: 600,
                   columns: [
                     DataColumn(
                       label: Text("Category Name"),
@@ -71,7 +91,6 @@ class CategoryListSection extends ConsumerWidget {
                           categories[index]); // Use ref.read to delete
                       if (context.mounted) {
                         // Handle any post-delete UI changes (if needed)
-                        // For example: showing a success notification or refreshing the UI
                       }
                     }, edit: () {
                       if (context.mounted) {

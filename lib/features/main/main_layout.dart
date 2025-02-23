@@ -37,14 +37,11 @@ class MainLayout extends StatelessWidget {
                       pageTitle: pageTitle, // Pass pageName to the header
                     ),
                   ),
-                  // const Divider(
-                  //   height: 100,
-                  //   color: primaryColor,
-                  //   thickness: 20,
-                  // ),
-                  // const Gap(10),
-
-                  child, // Display the child widget (actual content)
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: child,
+                    ),
+                  ), // Display the child widget (actual content)
                 ],
               ),
             ),
