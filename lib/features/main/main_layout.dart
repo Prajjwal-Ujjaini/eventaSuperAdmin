@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 import '../../core/constants/constants.dart';
 import 'components/main_header.dart';

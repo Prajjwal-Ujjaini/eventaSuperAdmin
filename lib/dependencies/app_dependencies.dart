@@ -5,8 +5,8 @@ import '../core/data/data_provider.dart';
 import '../features/auth/provider/auth_provider.dart';
 import '../features/auth/service/auth_service.dart';
 import '../core/services/http_services.dart';
-import '../features/service_type/category/provider/category_state.dart';
-import '../features/service_type/category/provider/category_provider.dart';
+import '../features/service_type/model/service_type_state_model.dart';
+import '../features/service_type/provider/service_type_provider.dart';
 
 class AppDependencies {
   final FlutterSecureStorage secureStorage;
@@ -15,7 +15,8 @@ class AppDependencies {
   final HttpService httpService; // Keep HttpService
   final AsyncNotifierProvider<DataNotifier, DataState> dataProviderAsync;
 
-  final StateNotifierProvider<CategoryNotifier, CategoryState> categoryProvider;
+  final StateNotifierProvider<ServiceTypeNotifier, ServiceTypeStateModel>
+      serviceTypeProvider;
 
   // Private constructor
   AppDependencies._({
@@ -24,7 +25,7 @@ class AppDependencies {
     required this.authNotifier,
     required this.httpService,
     required this.dataProviderAsync,
-    required this.categoryProvider,
+    required this.serviceTypeProvider,
   });
 
   // Factory method to create AppDependencies
@@ -35,11 +36,13 @@ class AppDependencies {
       () => DataNotifier(),
     );
 
-    final categoryProvider =
-        StateNotifierProvider<CategoryNotifier, CategoryState>((ref) {
+    final serviceTypeProvider =
+        StateNotifierProvider<ServiceTypeNotifier, ServiceTypeStateModel>(
+            (ref) {
       final httpService = ref.read(httpServiceProvider);
       final dataNotifier = ref.read(dataProviderAsync.notifier);
-      return CategoryNotifier(httpService, dataNotifier); // Pass both arguments
+      return ServiceTypeNotifier(
+          httpService, dataNotifier); // Pass both arguments
     });
 
     return AppDependencies._(
@@ -56,7 +59,7 @@ class AppDependencies {
         ),
       ),
       dataProviderAsync: dataProviderAsync,
-      categoryProvider: categoryProvider,
+      serviceTypeProvider: serviceTypeProvider,
     );
   }
 }

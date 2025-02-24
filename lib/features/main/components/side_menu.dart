@@ -26,7 +26,7 @@ class SideMenu extends ConsumerWidget {
           _buildDrawerTile(
             context,
             ref,
-            title: "Service Type",
+            title: "ServiceType",
             svgSrc: "assets/icons/menu_tran.svg",
             route: '/service-type',
           ),

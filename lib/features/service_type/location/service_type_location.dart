@@ -2,7 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 
 import '../../main/main_layout.dart';
-import '../category/category_screen.dart';
+import '../presentation/service_type_screen.dart';
 
 class ServiceTypeLocation extends BeamLocation<BeamState> {
   @override
@@ -16,9 +16,9 @@ class ServiceTypeLocation extends BeamLocation<BeamState> {
         title: 'service-type',
         child: MainLayout(
           currentIndex: 1,
-          pageTitle: 'Service Type',
+          pageTitle: 'ServiceType',
           // child: ServiceTypeListScreen(),
-          child: CategoryScreen(),
+          child: ServiceTypeScreen(),
         ),
       ),
     ];

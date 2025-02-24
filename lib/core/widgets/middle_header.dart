@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/widgets/add_new_button.dart';
-import '../../../../core/widgets/refresh_button.dart';
-import '../../../../core/widgets/search_field.dart';
+import 'add_new_button.dart';
+import 'refresh_button.dart';
+import 'search_field.dart';
 
 class MiddleHeader extends StatelessWidget {
   final String title;

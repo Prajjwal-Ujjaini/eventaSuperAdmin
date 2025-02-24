@@ -2,13 +2,13 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class CategoryImageCard extends StatelessWidget {
+class ServiceTypeImageCard extends StatelessWidget {
   final String labelText;
   final String? imageUrlForUpdateImage;
   final File? imageFile;
   final VoidCallback onTap;
 
-  const CategoryImageCard({
+  const ServiceTypeImageCard({
     super.key,
     required this.labelText,
     this.imageFile,

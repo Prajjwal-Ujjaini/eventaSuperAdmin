@@ -1,15 +1,15 @@
 import 'dart:developer';
-
+import 'package:eventa_super_admin/features/service_type/model/service_type_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/constants.dart';
-import '../../../../core/data/data_provider.dart';
-import '../category.dart';
-import '../provider/category_provider.dart';
-import 'add_category_form.dart';
 
-class CategoryListSection extends ConsumerWidget {
-  const CategoryListSection({
+import '../../../core/constants/constants.dart';
+import '../../../core/data/data_provider.dart';
+import '../provider/service_type_provider.dart';
+import 'add_service_type_form.dart';
+
+class ServiceTypeListSection extends ConsumerWidget {
+  const ServiceTypeListSection({
     super.key,
   });
 
@@ -19,7 +19,7 @@ class CategoryListSection extends ConsumerWidget {
     final dataState =
         ref.watch(dataProviderAsync); // Make sure to watch the correct provider
 
-    log('@@@@@@@@@@@@@@@@@@@@ dataState : ${dataState} @@@@@@@@@@@@@@@@@@@@');
+    log('@@@@@@@@@@@@@@@@@@@@ dataState : $dataState @@@@@@@@@@@@@@@@@@@@');
 
     return Container(
       padding: EdgeInsets.all(defaultPadding),
@@ -34,7 +34,7 @@ class CategoryListSection extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "All Categories",
+                "All ServiceType",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               // Add category count here
@@ -61,17 +61,17 @@ class CategoryListSection extends ConsumerWidget {
             child: dataState.when(
               // Handle different states using Riverpod's dataState
               data: (data) {
-                final categories =
+                final serviceTypes =
                     data.filteredServiceType; // or use allServiceType if needed
 
-                log('@@ categories : ${categories} @@@');
-                log('@@ categories.length : ${categories.length} @@@');
+                log('@@ serviceTypes : $serviceTypes @@@');
+                log('@@ serviceTypes.length : ${serviceTypes.length} @@@');
 
                 return DataTable(
                   columnSpacing: defaultPadding,
                   columns: [
                     DataColumn(
-                      label: Text("Category Name"),
+                      label: Text("ServiceType Name"),
                     ),
                     DataColumn(
                       label: Text("Added Date"),
@@ -84,20 +84,22 @@ class CategoryListSection extends ConsumerWidget {
                     ),
                   ],
                   rows: List.generate(
-                    categories.length,
-                    (index) =>
-                        categoryDataRow(categories[index], delete: () async {
-                      await ref.read(categoryProvider.notifier).deleteCategory(
-                          categories[index]); // Use ref.read to delete
+                    serviceTypes.length,
+                    (index) => serviceTypeDataRow(serviceTypes[index],
+                        delete: () async {
+                      await ref
+                          .read(serviceTypeProvider.notifier)
+                          .deleteServiceType(
+                              serviceTypes[index]); // Use ref.read to delete
                       if (context.mounted) {
                         // Handle any post-delete UI changes (if needed)
                       }
                     }, edit: () {
                       if (context.mounted) {
-                        showAddCategoryForm(
+                        showAddServiceTypeForm(
                             context: context,
                             ref: ref,
-                            category: categories[index]);
+                            serviceType: serviceTypes[index]);
                       }
                     }),
                   ),
@@ -115,14 +117,15 @@ class CategoryListSection extends ConsumerWidget {
   }
 }
 
-DataRow categoryDataRow(Category CatInfo, {Function? edit, Function? delete}) {
+DataRow serviceTypeDataRow(ServiceTypeModel serviceType,
+    {Function? edit, Function? delete}) {
   return DataRow(
     cells: [
       DataCell(
         Row(
           children: [
             Image.network(
-              CatInfo.image ?? '',
+              serviceType.image ?? '',
               height: 30,
               width: 30,
               errorBuilder: (BuildContext context, Object exception,
@@ -132,12 +135,12 @@ DataRow categoryDataRow(Category CatInfo, {Function? edit, Function? delete}) {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(CatInfo.name ?? ''),
+              child: Text(serviceType.serviceTypeName ?? ''),
             ),
           ],
         ),
       ),
-      DataCell(Text(CatInfo.createdAt ?? '')),
+      DataCell(Text(serviceType.createdAt ?? '')),
       DataCell(IconButton(
           onPressed: () {
             if (edit != null) edit();

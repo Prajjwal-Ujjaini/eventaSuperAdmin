@@ -26,7 +26,7 @@ class ServiceTypeListScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final serviceType = data.allServiceType[index];
               return ListTile(
-                title: Text(serviceType.name ?? ''),
+                title: Text(serviceType.serviceTypeName ?? ''),
               );
             },
           );

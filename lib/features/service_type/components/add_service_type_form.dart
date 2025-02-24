@@ -4,26 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../category.dart';
-import '../provider/category_provider.dart';
-import '../../../../core/constants/constants.dart';
-import '../../../../core/widgets/category_image_card.dart';
-import '../../../../core/widgets/custom_text_field.dart';
+import '../model/service_type_model.dart';
+import '../provider/service_type_provider.dart';
+import '../../../core/constants/constants.dart';
+import '../../../core/widgets/service_type_image_card.dart';
+import '../../../core/widgets/custom_text_field.dart';
 
-class CategorySubmitForm extends ConsumerWidget {
-  final Category? category;
+class ServiceTypeSubmitForm extends ConsumerWidget {
+  final ServiceTypeModel? serviceType;
 
-  const CategorySubmitForm({super.key, this.category});
+  const ServiceTypeSubmitForm({super.key, this.serviceType});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var size = MediaQuery.of(context).size;
-    // Access the CategoryProvider using ref.watch
-    final catProvider = ref.watch(categoryProvider);
+    // Access the ServiceTypeProvider using ref.watch
+    final svrcTypeProvider = ref.watch(serviceTypeProvider);
 
     return SingleChildScrollView(
       child: Form(
-        key: ref.read(categoryProvider).addCategoryFormKey,
+        key: ref.read(serviceTypeProvider).addServiceTypeFormKey,
         child: Container(
           padding: EdgeInsets.all(defaultPadding),
           width: size.width * 0.3,
@@ -35,22 +35,22 @@ class CategorySubmitForm extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Gap(defaultPadding),
-              CategoryImageCard(
-                labelText: "Category",
-                imageFile: catProvider.selectedImage,
-                imageUrlForUpdateImage: category?.image,
+              ServiceTypeImageCard(
+                labelText: "ServiceType",
+                imageFile: svrcTypeProvider.selectedImage,
+                imageUrlForUpdateImage: serviceType?.image,
                 onTap: () {
-                  ref.read(categoryProvider.notifier).pickImage();
+                  ref.read(serviceTypeProvider.notifier).pickImage();
                 },
               ),
               Gap(defaultPadding),
               CustomTextField(
-                controller: ref.read(categoryProvider).categoryNameCtrl,
-                labelText: 'Category Name',
+                controller: ref.read(serviceTypeProvider).serviceTypeNameCtrl,
+                labelText: 'ServiceType Name',
                 onSave: (val) {},
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a category name';
+                    return 'Please enter a serviceType name';
                   }
                   return null;
                 },
@@ -78,18 +78,18 @@ class CategorySubmitForm extends ConsumerWidget {
                     onPressed: () async {
                       // Validate and save the form
                       if (ref
-                          .read(categoryProvider)
-                          .addCategoryFormKey
+                          .read(serviceTypeProvider)
+                          .addServiceTypeFormKey
                           .currentState!
                           .validate()) {
                         ref
-                            .read(categoryProvider)
-                            .addCategoryFormKey
+                            .read(serviceTypeProvider)
+                            .addServiceTypeFormKey
                             .currentState!
                             .save();
                         await ref
-                            .read(categoryProvider.notifier)
-                            .submitCategory();
+                            .read(serviceTypeProvider.notifier)
+                            .submitServiceType();
 
                         if (context.mounted) {
                           log('context.mounted');
@@ -109,25 +109,27 @@ class CategorySubmitForm extends ConsumerWidget {
   }
 }
 
-// How to show the category popup
-void showAddCategoryForm(
+// How to show the serviceType popup
+void showAddServiceTypeForm(
     {required BuildContext context,
     required WidgetRef ref,
-    Category? category}) {
-  // Call setDataForUpdateCategory before showing the form
+    ServiceTypeModel? serviceType}) {
+  // Call setDataForUpdateServiceType before showing the form
 
-  log('showAddCategoryForm category =: ${category.toString()} ');
+  log('showAddServiceTypeForm serviceType =: ${serviceType.toString()} ');
 
-  ref.read(categoryProvider.notifier).setDataForUpdateCategory(category);
+  ref
+      .read(serviceTypeProvider.notifier)
+      .setDataForUpdateServiceType(serviceType);
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: bgColor,
         title: Center(
-            child: Text('Add Category'.toUpperCase(),
+            child: Text('Add ServiceType'.toUpperCase(),
                 style: TextStyle(color: primaryColor))),
-        content: CategorySubmitForm(category: category),
+        content: ServiceTypeSubmitForm(serviceType: serviceType),
       );
     },
   );

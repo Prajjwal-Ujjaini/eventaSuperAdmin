@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
-import '../../features/service_type/category/category.dart';
+import '../../features/service_type/model/service_type_model.dart';
 import '../../models/api_response.dart';
 import '../services/http_services.dart';
 import '../utility/notification_helper.dart';
 
 class DataState {
-  final List<Category> allServiceType;
-  final List<Category> filteredServiceType;
+  final List<ServiceTypeModel> allServiceType;
+  final List<ServiceTypeModel> filteredServiceType;
 
   DataState({
     required this.allServiceType,
@@ -26,8 +26,8 @@ class DataState {
 
   // Create a new copy of the state with updated values (immutability)
   DataState copyWith({
-    List<Category>? allServiceType,
-    List<Category>? filteredServiceType,
+    List<ServiceTypeModel>? allServiceType,
+    List<ServiceTypeModel>? filteredServiceType,
   }) {
     return DataState(
       allServiceType: allServiceType ?? this.allServiceType,
@@ -57,16 +57,17 @@ class DataNotifier extends AsyncNotifier<DataState> {
     state = const AsyncValue.loading(); // Set loading state
     log('****getAllServiceType called ****');
     try {
-      Response response = await service.getItems(endpointUrl: 'categories');
+      Response response = await service.getItems(endpointUrl: 'serviceType');
+      log('****getAllServiceType response ${jsonDecode(response.body)} ****');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         var jsonResponse = jsonDecode(response.body);
 
-        ApiResponse<List<Category>> apiResponse =
-            ApiResponse<List<Category>>.fromJson(
+        ApiResponse<List<ServiceTypeModel>> apiResponse =
+            ApiResponse<List<ServiceTypeModel>>.fromJson(
                 jsonResponse,
                 (json) => (json as List)
-                    .map((item) => Category.fromJson(item))
+                    .map((item) => ServiceTypeModel.fromJson(item))
                     .toList());
         log('apiResponse.data :${apiResponse.data}');
         log('apiResponse.data.length :${apiResponse.data!.length}');
@@ -95,7 +96,9 @@ class DataNotifier extends AsyncNotifier<DataState> {
   void filterServiceType(String keyword) {
     final lowerKeyword = keyword.toLowerCase();
     final filtered = state.value!.allServiceType.where((serviceType) {
-      return (serviceType.name ?? '').toLowerCase().contains(lowerKeyword);
+      return (serviceType.serviceTypeName ?? '')
+          .toLowerCase()
+          .contains(lowerKeyword);
     }).toList();
 
     state = AsyncValue.data(
